@@ -37,7 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
     // some states we want to keep track of
     private static boolean lines = false;
-    private static boolean bounce = false;
+    private static boolean bounce = true;
+    private static boolean gravity = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +86,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.bounce:
                 bounce = !bounce;
+                break;
+            case R.id.gravity:
+                gravity = !gravity;
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -208,6 +212,11 @@ public class MainActivity extends AppCompatActivity {
                         nextY = y + dy;
                     }
                 }
+
+                if(MainActivity.gravity) {
+                    dy+= 0.5;
+                }
+
                 x = nextX;
                 y = nextY;
 

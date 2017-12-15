@@ -17,4 +17,9 @@
         android:title="Bounce"
         app:showAsAction="collapseActionView"/>
 
+    <item
+        android:id="@+id/gravity"
+        android:title="gravity"
+        app:showAsAction="collapseActionView"/>
+
 </menu>
