@@ -8,6 +8,7 @@ package edu.ucsb.cs.cs184.sswong.fun;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -15,6 +16,7 @@ import android.view.View;
  * initiate an animation thread that repaints a view at regular intervals.
  */
 public class DrawingThread {
+    private static String TAG = "DrawingThread/Simon";
     private View view = null;
     private int fps;
     private Thread thread = null;
@@ -49,7 +51,9 @@ public class DrawingThread {
         if (thread == null) {
             thread = new Thread(new MainRunner());
             thread.start();
+            Log.d(TAG, "Thread started");
         }
+
     }
 
     /**
@@ -64,6 +68,7 @@ public class DrawingThread {
                 // empty
             }
             thread = null;
+            Log.d(TAG, "Thread ended");
         }
     }
 

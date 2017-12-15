@@ -100,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
             super(context);
 
             drawingThread = new DrawingThread(this, fps);
-            drawingThread.start();
 
         }
 
@@ -127,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if(balls.size() == 0) {
                     animating = false;
+                    drawingThread.stop();
                 }
             }
         }
@@ -144,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
         public boolean onTouchEvent(MotionEvent event) {
 
             animating = true;
+            drawingThread.start();
 
             float x = event.getX();
             float y = event.getY();
