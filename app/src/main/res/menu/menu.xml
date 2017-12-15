@@ -7,4 +7,14 @@
         android:title="Clear"
         app:showAsAction="always"/>
 
+    <item
+        android:id="@+id/lines"
+        android:title="Lines"
+        app:showAsAction="collapseActionView"/>
+
+    <item
+        android:id="@+id/bounce"
+        android:title="Bounce"
+        app:showAsAction="collapseActionView"/>
+
 </menu>

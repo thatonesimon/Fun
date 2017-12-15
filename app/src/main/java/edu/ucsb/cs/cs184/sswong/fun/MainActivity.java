@@ -25,8 +25,6 @@ public class MainActivity extends AppCompatActivity {
     private DrawingThread drawingThread;
 
     private int fps = 30;
-    // how long balls have been moving
-    private int seconds = 0;
 
     private ArrayList<FireworksView.Ball> balls = new ArrayList<>();
 
@@ -36,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
     // so we know when to kill ball
     private static int screenWidth;
     private static int screenHeight;
+
+    // some states we want to keep track of
+    private static boolean lines = false;
+    private static boolean bounce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +75,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId()) {
             case R.id.clear:
                 balls.clear();
+                break;
+            case R.id.lines:
+                lines = !lines;
+                break;
+            case R.id.bounce:
+                bounce = !bounce;
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -99,28 +108,27 @@ public class MainActivity extends AppCompatActivity {
                 Paint p = new Paint();
                 Random r = new Random();
                 Iterator<Ball> ball = balls.iterator();
+
                 while(ball.hasNext()) {
                     Ball b = ball.next();
                     randomColor(p, r);
                     b.drawBall(canvas, p);
                     b.updatePosition();
-                    if(b.isOut()) {
+
+                    if(b.isOut() || b.timeAlive > fps*10) {
                         Log.d(TAG, "Ball removed");
                         ball.remove();
                     }
                 }
-                seconds++;
 
-                // delete balls after 10 seconds
-                if(seconds > fps*10) {
+                if(balls.size() == 0) {
                     animating = false;
-                    seconds = 0;
-                    balls.clear();
                 }
             }
         }
 
         private void randomColor(Paint p, Random r) {
+
             int alpha = r.nextInt(255);
             int red = r.nextInt(255);
             int green = r.nextInt(255);
@@ -132,8 +140,6 @@ public class MainActivity extends AppCompatActivity {
         public boolean onTouchEvent(MotionEvent event) {
 
             animating = true;
-            // reset time
-            seconds = 0;
 
             float x = event.getX();
             float y = event.getY();
@@ -157,8 +163,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         private void createBalls(float x, float y) {
-            // clear array
-            // balls.clear();
 
             for(int i = 0; i < 15; i++) {
                 Ball b = new Ball(x, y);
@@ -168,33 +172,61 @@ public class MainActivity extends AppCompatActivity {
 
 
         private class Ball implements Serializable {
-            float x, y, dx, dy, xx, yy;
+
+            float x, y, dx, dy, startX, startY;
+            int timeAlive;
 
             private Ball(float x, float y) {
+
                 this.x = x;
                 this.y = y;
-                xx = x;
-                yy = y;
+                startX = x;
+                startY = y;
 
-                // velocity = ([-20,20], [-20,20])
+                // velocity = ([-15,15], [-15,15])
                 Random rand = new Random();
-                this.dx = 30*rand.nextFloat()-15;
-                this.dy = 30*rand.nextFloat()-15;
+                dx = 30*rand.nextFloat()-15;
+                dy = 30*rand.nextFloat()-15;
+
+                timeAlive = rand.nextInt(100);
             }
 
             private void updatePosition() {
-                x = x + dx;
-                y = y + dy;
+
+                float nextX = x + dx;
+                float nextY = y + dy;
+
+                if(MainActivity.bounce) {
+
+                    if(nextX > MainActivity.screenWidth || nextX < 0 ) {
+                        dx = -dx;
+                        nextX = x + dx;
+                    }
+
+                    if(nextY > MainActivity.screenHeight|| nextY < 0 ) {
+                        dy = -dy;
+                        nextY = y + dy;
+                    }
+                }
+                x = nextX;
+                y = nextY;
+
+                timeAlive++;
             }
 
             private void drawBall(Canvas c, Paint p) {
+
                 Random r = new Random();
                 c.drawCircle(x, y, r.nextInt(15)+15, p);
-//                p.setStrokeWidth(1);
-//                c.drawLine(xx, yy, x, y, p);
+
+                if(MainActivity.lines) {
+                    p.setStrokeWidth(1);
+                    c.drawLine(startX, startY, x, y, p);
+                }
             }
 
             public boolean isOut() {
+
                 return (x > MainActivity.screenWidth || x < 0 ||
                         y > MainActivity.screenHeight|| y < 0 );
             }
