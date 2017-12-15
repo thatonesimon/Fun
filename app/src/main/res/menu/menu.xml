@@ -19,7 +19,7 @@
 
     <item
         android:id="@+id/gravity"
-        android:title="gravity"
+        android:title="Gravity"
         app:showAsAction="collapseActionView"/>
 
 </menu>
