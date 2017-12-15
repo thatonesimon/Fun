@@ -26,19 +26,19 @@ public class MainActivity extends AppCompatActivity {
 
     private int fps = 30;
 
-    private ArrayList<FireworksView.Ball> balls = new ArrayList<>();
+    private ArrayList<Ball> balls = new ArrayList<>();
 
     // are there balls on the screen to animate
     private boolean animating = false;
 
     // so we know when to kill ball
-    private static int screenWidth;
-    private static int screenHeight;
+    public static int screenWidth;
+    public static int screenHeight;
 
     // some states we want to keep track of
-    private static boolean lines = false;
-    private static boolean bounce = true;
-    private static boolean gravity = true;
+    public static boolean lines = false;
+    public static boolean bounce = true;
+    public static boolean gravity = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             animating = (boolean) savedInstanceState.get("animating");
-            balls = (ArrayList<FireworksView.Ball>) savedInstanceState.get("balls");
+            balls = (ArrayList<Ball>) savedInstanceState.get("balls");
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -172,73 +172,6 @@ public class MainActivity extends AppCompatActivity {
             for(int i = 0; i < 15; i++) {
                 Ball b = new Ball(x, y);
                 balls.add(b);
-            }
-        }
-
-
-        private class Ball implements Serializable {
-
-            float x, y, dx, dy, startX, startY;
-            int timeAlive;
-
-            private Ball(float x, float y) {
-
-                this.x = x;
-                this.y = y;
-                startX = x;
-                startY = y;
-
-                // velocity = ([-15,15], [-15,15])
-                Random rand = new Random();
-                dx = 30*rand.nextFloat()-15;
-                dy = 30*rand.nextFloat()-15;
-
-                timeAlive = rand.nextInt(100);
-            }
-
-            private void updatePosition() {
-
-                float nextX = x + dx;
-                float nextY = y + dy;
-
-                if(MainActivity.bounce) {
-
-                    if(nextX > MainActivity.screenWidth || nextX < 0 ) {
-                        dx = -dx;
-                        nextX = x + dx;
-                    }
-
-                    if(nextY > MainActivity.screenHeight|| nextY < 0 ) {
-                        dy = -dy;
-                        nextY = y + dy;
-                    }
-                }
-
-                if(MainActivity.gravity) {
-                    dy+= 0.5;
-                }
-
-                x = nextX;
-                y = nextY;
-
-                timeAlive++;
-            }
-
-            private void drawBall(Canvas c, Paint p) {
-
-                Random r = new Random();
-                c.drawCircle(x, y, r.nextInt(15)+15, p);
-
-                if(MainActivity.lines) {
-                    p.setStrokeWidth(1);
-                    c.drawLine(startX, startY, x, y, p);
-                }
-            }
-
-            public boolean isOut() {
-
-                return (x > MainActivity.screenWidth || x < 0 ||
-                        y > MainActivity.screenHeight|| y < 0 );
             }
         }
     }
