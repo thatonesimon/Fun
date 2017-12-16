@@ -39,13 +39,17 @@ public class MainActivity extends AppCompatActivity {
     public static boolean lines = false;
     public static boolean walls = true;
     public static boolean gravity = true;
+    public static boolean flicker = false;
+
+    FireworksView fireworksView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         LinearLayout layout = (LinearLayout) findViewById(R.id.main);
-        layout.addView(new FireworksView(this));
+        fireworksView = new FireworksView(this);
+        layout.addView(fireworksView);
 
         Display display = getWindowManager().getDefaultDisplay();
         screenWidth = display.getWidth();
@@ -57,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
         } catch(Exception e) {
             e.printStackTrace();
         }
+
+        Log.d(TAG, "" + layout.getWidth() + fireworksView.getWidth());
     }
 
     @Override
@@ -99,6 +105,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.gravity:
                 gravity = !gravity;
                 break;
+            case R.id.flicker:
+                flicker = !flicker;
+                break;
         }
 
         if(item.isCheckable()) {
@@ -113,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
             super(context);
 
             drawingThread = new DrawingThread(this, fps);
-
         }
 
         @Override
@@ -127,8 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
                 while(ball.hasNext()) {
                     Ball b = ball.next();
-                    randomColor(p, r);
-                    b.drawBall(canvas, p);
+                    b.drawBall(canvas);
                     if(!paused) {
                         b.updatePosition();
                     }
@@ -146,17 +153,11 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        private void randomColor(Paint p, Random r) {
-
-            int alpha = r.nextInt(255);
-            int red = r.nextInt(255);
-            int green = r.nextInt(255);
-            int blue = r.nextInt(255);
-            p.setARGB(alpha, red, green, blue);
-        }
-
         @Override
         public boolean onTouchEvent(MotionEvent event) {
+
+            screenWidth = fireworksView.getWidth();
+            screenHeight = fireworksView.getHeight();
 
             animating = true;
             drawingThread.start();

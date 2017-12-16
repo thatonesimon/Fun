@@ -13,7 +13,9 @@ import java.util.Random;
 class Ball implements Serializable {
 
     private float x, y, dx, dy, startX, startY;
+    private float radius;
     int timeAlive;
+    private int alpha, red, green, blue;
 
     public Ball(float x, float y) {
 
@@ -27,7 +29,15 @@ class Ball implements Serializable {
         dx = 30*rand.nextFloat()-15;
         dy = 30*rand.nextFloat()-15;
 
+        // radius = [15, 30]
+        radius = rand.nextInt(15)+15;
+
         timeAlive = rand.nextInt(100);
+
+        alpha = rand.nextInt(255);
+        red = rand.nextInt(255);
+        green = rand.nextInt(255);
+        blue = rand.nextInt(255);
     }
 
     public void updatePosition() {
@@ -37,12 +47,12 @@ class Ball implements Serializable {
 
         if(MainActivity.walls) {
 
-            if(nextX > MainActivity.screenWidth || nextX < 0 ) {
+            if(nextX > MainActivity.screenWidth-radius || nextX < 0+radius ) {
                 dx = -dx;
                 nextX = x + dx;
             }
 
-            if(nextY > MainActivity.screenHeight|| nextY < 0 ) {
+            if(nextY > MainActivity.screenHeight-radius || nextY < 0+radius ) {
                 dy = -dy;
                 nextY = y + dy;
             }
@@ -58,20 +68,40 @@ class Ball implements Serializable {
         timeAlive++;
     }
 
-    public void drawBall(Canvas c, Paint p) {
+    public void drawBall(Canvas c) {
 
-        Random r = new Random();
-        c.drawCircle(x, y, r.nextInt(15)+15, p);
+        if(false) {
+            Random r = new Random();
+            radius = r.nextInt(15)+15;
+        }
+
+        if(MainActivity.flicker) {
+            randomColor();
+        }
+        Paint paint = new Paint();
+        paint.setARGB(alpha, red, green, blue);
+
+        c.drawCircle(x, y, radius, paint);
 
         if(MainActivity.lines) {
-            p.setStrokeWidth(1);
-            c.drawLine(startX, startY, x, y, p);
+            paint.setStrokeWidth(1);
+            c.drawLine(startX, startY, x, y, paint);
         }
     }
 
     public boolean isOut() {
 
-        return (x > MainActivity.screenWidth || x < 0 ||
-                y > MainActivity.screenHeight|| y < 0 );
+        return (x > MainActivity.screenWidth-radius || x < 0+radius ||
+                y > MainActivity.screenHeight-radius || y < 0+radius);
+    }
+
+    private void randomColor() {
+
+        Random rand = new Random();
+
+        alpha = rand.nextInt(255);
+        red = rand.nextInt(255);
+        green = rand.nextInt(255);
+        blue = rand.nextInt(255);
     }
 }

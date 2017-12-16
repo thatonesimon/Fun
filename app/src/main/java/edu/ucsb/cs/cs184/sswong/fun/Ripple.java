@@ -12,7 +12,8 @@ import java.util.Random;
 
 public class Ripple implements Serializable{
 
-    private float x, y, radius;
+    private float x, y;
+    private float radius;
     int timeAlive;
 
     public Ripple(float x, float y) {
