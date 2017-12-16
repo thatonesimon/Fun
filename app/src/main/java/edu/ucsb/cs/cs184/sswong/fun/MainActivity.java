@@ -81,6 +81,11 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.pause:
                 paused = !paused;
+                if(paused) {
+                    item.setTitle("Play");
+                } else {
+                    item.setTitle("Pause");
+                }
                 break;
             case R.id.clear:
                 balls.clear();
