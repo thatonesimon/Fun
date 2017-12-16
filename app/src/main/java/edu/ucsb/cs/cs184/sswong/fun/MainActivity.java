@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     public static int screenHeight;
 
     // some states we want to keep track of
+    public static boolean paused = false;
     public static boolean lines = false;
     public static boolean bounce = true;
     public static boolean gravity = true;
@@ -78,6 +79,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
+
+            case R.id.pause:
+                paused = !paused;
+                break;
             case R.id.clear:
                 balls.clear();
                 break;
@@ -116,7 +121,9 @@ public class MainActivity extends AppCompatActivity {
                     Ball b = ball.next();
                     randomColor(p, r);
                     b.drawBall(canvas, p);
-                    b.updatePosition();
+                    if(!paused) {
+                        b.updatePosition();
+                    }
 
                     if(b.isOut() || b.timeAlive > fps*10) {
                         Log.d(TAG, "Ball removed");
