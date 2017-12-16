@@ -13,7 +13,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -38,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     // some states we want to keep track of
     public static boolean paused = false;
     public static boolean lines = false;
-    public static boolean bounce = true;
+    public static boolean walls = true;
     public static boolean gravity = true;
 
     @Override
@@ -89,8 +88,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.lines:
                 lines = !lines;
                 break;
-            case R.id.bounce:
-                bounce = !bounce;
+            case R.id.walls:
+                walls = !walls;
                 break;
             case R.id.gravity:
                 gravity = !gravity;

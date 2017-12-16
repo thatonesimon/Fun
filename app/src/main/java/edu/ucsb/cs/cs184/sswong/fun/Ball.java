@@ -35,7 +35,7 @@ class Ball implements Serializable {
         float nextX = x + dx;
         float nextY = y + dy;
 
-        if(MainActivity.bounce) {
+        if(MainActivity.walls) {
 
             if(nextX > MainActivity.screenWidth || nextX < 0 ) {
                 dx = -dx;
