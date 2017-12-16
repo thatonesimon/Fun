@@ -15,16 +15,21 @@
     <item
         android:id="@+id/lines"
         android:title="Lines"
-        app:showAsAction="collapseActionView"/>
+        app:showAsAction="collapseActionView"
+        android:checkable="true" />
 
     <item
         android:id="@+id/walls"
         android:title="Walls"
-        app:showAsAction="collapseActionView"/>
+        app:showAsAction="collapseActionView"
+        android:checkable="true"
+        android:checked="true" />
 
     <item
         android:id="@+id/gravity"
         android:title="Gravity"
-        app:showAsAction="collapseActionView"/>
+        app:showAsAction="collapseActionView"
+        android:checkable="true"
+        android:checked="true" />
 
 </menu>

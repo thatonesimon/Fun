@@ -95,6 +95,10 @@ public class MainActivity extends AppCompatActivity {
                 gravity = !gravity;
                 break;
         }
+
+        if(item.isCheckable()) {
+            item.setChecked(!item.isChecked());
+        }
         return super.onOptionsItemSelected(item);
     }
 
